@@ -53,21 +53,27 @@
       document.getElementById('updateForm').reset();
     });
 
-    document.getElementById('chatSend').addEventListener('click', function() {
-      const chatInput = document.getElementById('chatInput');
-      const chatBox = document.getElementById('chatBox');
-      
-      if (chatInput.value.trim() !== '') {
-        const parentMessage = document.createElement('div');
-        parentMessage.innerHTML = `
-          <div class="text-sm font-medium text-gray-800">Margot:</div>
-          <div class="bg-green-100 rounded p-2 text-sm">${chatInput.value}</div>`;
-        
-        chatBox.appendChild(parentMessage);
-        chatInput.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
+    <script>
+document.querySelector('button').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    const assignments = document.querySelector('input[placeholder="Enter assignments for Evalyn..."]').value;
+    const reminders = document.querySelector('input[placeholder="Enter reminders for Evalyn..."]').value;
+    const messages = document.querySelector('input[placeholder="Enter motivational or supportive messages..."]').value;
+
+    fetch('YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ assignments, reminders, messages, source: 'parent' }),
     });
+
+    alert("Your updates have been successfully submitted! 🎉");
+    document.querySelectorAll('input').forEach(input => input.value = '');
+});
+</script>
   </script>
 </body>
 </html>
