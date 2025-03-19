@@ -47,37 +47,36 @@
   </div>
 
   <script>
-document.getElementById('updateForm').addEventListener('submit', function(event) {
-  event.preventDefault();
-  alert("Your updates have been successfully submitted! 🎉");
-  document.getElementById('updateForm').reset();
-});
+    document.getElementById('updateForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      alert("Your updates have been successfully submitted! 🎉");
+      document.getElementById('updateForm').reset();
+    });
 
-// JavaScript: Send chat message to Google Sheets and update UI
-const sendButton = document.getElementById('chatSend');  // Corrected Button ID
-sendButton.addEventListener('click', () => {
-  const message = document.getElementById('chatInput').value.trim();
-  if (message !== "") {
-    // Append the new message to the chat UI immediately
-    const chatBox = document.getElementById('chatBox');
+    // JavaScript: Send chat message to Google Sheets and update UI
+    const sendButton = document.getElementById('chatSend');  // Corrected Button ID
+    sendButton.addEventListener('click', () => {
+      const message = document.getElementById('chatInput').value.trim();
+      if (message !== "") {
+        // Append the new message to the chat UI immediately
+        const chatBox = document.getElementById('chatBox');
 
-    const userMsgDiv = document.createElement('div');
-    userMsgDiv.className = 'bg-green-100 rounded p-2 text-sm mb-2';
-    userMsgDiv.textContent = message;
+        const userMsgDiv = document.createElement('div');
+        userMsgDiv.className = 'bg-green-100 rounded p-2 text-sm mb-2';
+        userMsgDiv.textContent = message;
 
-    chatBox.appendChild(userMsgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to newest message
+        chatBox.appendChild(userMsgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to newest message
 
-    // Send the message to Google Sheets via Apps Script
-    google.script.run.withSuccessHandler(function() {
-      console.log('Message stored in Google Sheets');
-    }).storeMessage(message);
+        // Send the message to Google Sheets via Apps Script
+        google.script.run.withSuccessHandler(function() {
+          console.log('Message stored in Google Sheets');
+        }).storeMessage(message);
 
-    // Clear the input field after sending the message
-    document.getElementById('chatInput').value = "";
-  }
-});
-</script>
+        // Clear the input field after sending the message
+        document.getElementById('chatInput').value = "";
+      }
+    });
   </script>
 </body>
 </html>
