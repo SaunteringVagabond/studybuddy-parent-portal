@@ -47,53 +47,47 @@
   </div>
 
   <script>
-document.getElementById('updateForm').addEventListener('submit', function(event) {
-  event.preventDefault();
+  document.getElementById('updateForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-  const assignments = document.getElementById('assignments').value.trim();
-  const reminders = document.getElementById('reminders').value.trim();
-  const messages = document.getElementById('messages').value.trim();
+    const assignments = document.getElementById('assignments').value;
+    const reminders = document.getElementById('reminders').value;
+    const messages = document.getElementById('messages').value;
 
-  const formData = new URLSearchParams();
-  formData.append('assignments', assignments);
-  formData.append('reminders', reminders);
-  formData.append('messages', messages);
-
-  fetch('https://script.google.com/macros/s/AKfycbwhr-G_tifOrCpUjZbTm4aQ-exLTTKr8XBHvlSIVfJVloW66UJ51egb4vZfsVRkJzmT/exec', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: formData
-  });
-
-  alert("Your updates have been successfully submitted! 🎉");
-  document.getElementById('updateForm').reset();
-});
-
-document.getElementById('chatSend').addEventListener('click', () => {
-  const message = document.getElementById('chatInput').value.trim();
-  if (message !== "") {
-    const chatBox = document.getElementById('chatBox');
-    const userMsgDiv = document.createElement('div');
-    userMsgDiv.className = 'bg-green-100 rounded p-2 text-sm mb-2';
-    userMsgDiv.textContent = message;
-
-    chatBox.appendChild(userMsgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    const chatData = new URLSearchParams();
-    chatData.append('chatMessage', message);
-
-    fetch('https://script.google.com/macros/s/AKfycbwj1ykwhKo094pKKpgHjHvyfCQLcCTg6znj-BD6nbjvW6Pe5zf0MVHvDcGi2AuYpFDb/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbwj1ykwhKo094pKKpgHjHvyfCQLcCTg6znj-BD6nbjvW6Pe5zf0MVHvDcGi2AuYpFDb/exec', {  
       method: 'POST',
       mode: 'no-cors',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: chatData
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `assignments=${encodeURIComponent(assignments)}&reminders=${encodeURIComponent(reminders)}&messages=${encodeURIComponent(messages)}`
     });
 
-    document.getElementById('chatInput').value = "";
-  }
-});
+    alert("Your updates have been successfully submitted! 🎉");
+    document.getElementById('updateForm').reset();
+  });
+
+  const sendButton = document.getElementById('chatSend');
+  sendButton.addEventListener('click', () => {
+    const message = document.getElementById('chatInput').value.trim();
+    if (message !== "") {
+      const chatBox = document.getElementById('chatBox');
+
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'bg-green-100 rounded p-2 text-sm mb-2';
+      userMsgDiv.textContent = message;
+
+      chatBox.appendChild(userMsgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      fetch('YOUR_WEB_APP_URL_HERE', {  
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'chatMessage=' + encodeURIComponent(message),
+      });
+
+      document.getElementById('chatInput').value = "";
+    }
+  });
 </script>
 </body>
 </html>
