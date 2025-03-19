@@ -48,7 +48,7 @@
   <script>
     document.getElementById('parentForm').onsubmit = (e) => {
       e.preventDefault();
-      fetch('https://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbyMvBcDGeK513Ti4CynnqPlJlAAf-qlnY49CnvUcfGAGM7rD41OSSi_9UIzURi74QXc/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -64,7 +64,7 @@
     document.getElementById('sendChat').onclick = () => {
       const chatInput = document.getElementById('chatInput').value.trim();
       if (chatInput !== "") {
-        fetch('https://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbyMvBcDGeK513Ti4CynnqPlJlAAf-qlnY49CnvUcfGAGM7rD41OSSi_9UIzURi74QXc/exec', {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
