@@ -7,12 +7,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { background-color: #eef2ff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; }
-    .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    h1 { color: #4a90e2; text-align: center; font-size: 24px; }
+    .container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h1 { color: #4a90e2; text-align: center; font-size: 26px; font-weight: bold; }
     label { font-weight: bold; color: #4a4a4a; display: block; margin-top: 10px; }
-    input, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
-    button { background: #4a90e2; color: white; border: none; cursor: pointer; font-weight: bold; }
+    input, button { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
+    button { background: #4a90e2; color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
     button:hover { background: #357ABD; }
+    .dashboard-section { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
     .chat-container { background: #e3f2fd; padding: 12px; border-radius: 10px; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     .chat-box { background: #f8f9fa; padding: 10px; border-radius: 10px; max-height: 200px; overflow-y: auto; }
     .message { padding: 8px; border-radius: 5px; margin-bottom: 5px; }
@@ -23,15 +24,18 @@
 <body>
   <div class="container">
     <h1>Parent Update Portal - StudyBuddy</h1>
-    <form id="parentForm">
-      <label>Assignments:</label>
-      <input id="assignments" placeholder="Enter assignments">
-      <label>Reminders:</label>
-      <input id="reminders" placeholder="Enter reminders">
-      <label>Messages from Parents:</label>
-      <input id="messages" placeholder="Enter messages">
-      <button type="submit">Submit Updates</button>
-    </form>
+    <div class="dashboard-section">
+      <h2 class="text-lg font-bold text-indigo-600">📚 Assignments & Reminders</h2>
+      <form id="parentForm">
+        <label>Assignments:</label>
+        <input id="assignments" placeholder="Enter assignments">
+        <label>Reminders:</label>
+        <input id="reminders" placeholder="Enter reminders">
+        <label>Messages from Parents:</label>
+        <input id="messages" placeholder="Enter messages">
+        <button type="submit">Submit Updates</button>
+      </form>
+    </div>
     <div class="chat-container">
       <h2 class="text-lg font-bold text-blue-700">💬 Chat with StudyBuddy</h2>
       <div id="chatBox" class="chat-box">
@@ -44,7 +48,7 @@
   <script>
     document.getElementById('parentForm').onsubmit = (e) => {
       e.preventDefault();
-      fetch('https://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec, {
+      fetch('Yhttps://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type':'application/x-www-form-urlencoded' },
