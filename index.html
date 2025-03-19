@@ -45,7 +45,9 @@
       <button id="sendChat">Send Chat</button>
     </div>
   </div>
+
   <script>
+    // ✅ Clear form fields after successful submission
     document.getElementById('parentForm').onsubmit = (e) => {
       e.preventDefault();
       fetch('https://script.google.com/macros/s/AKfycbyMvBcDGeK513Ti4CynnqPlJlAAf-qlnY49CnvUcfGAGM7rD41OSSi_9UIzURi74QXc/exec', {
@@ -58,9 +60,13 @@
           reminders: document.getElementById('reminders').value,
           messages: document.getElementById('messages').value
         })
-      }).then(() => alert("Updates submitted 🎉"));
+      }).then(() => {
+        alert("Updates submitted 🎉");
+        document.getElementById('parentForm').reset(); // ✅ Clears the form
+      });
     };
 
+    // ✅ Ensure chat button correctly sends messages
     document.getElementById('sendChat').onclick = () => {
       const chatInput = document.getElementById('chatInput').value.trim();
       if (chatInput !== "") {
@@ -78,7 +84,7 @@
           userMsg.className = 'user-message message';
           userMsg.textContent = chatInput;
           chatBox.appendChild(userMsg);
-          document.getElementById('chatInput').value = "";
+          document.getElementById('chatInput').value = ""; // ✅ Clears chat input field
         });
       }
     };
