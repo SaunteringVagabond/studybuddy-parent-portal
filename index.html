@@ -53,6 +53,12 @@
         </div>
 
     </div>
-
+<script>
+document.querySelector('form').addEventListener('submit', function(event) {
+  event.preventDefault();  // Prevents page reload
+  alert("Your updates have been successfully submitted! 🎉");  // Confirmation message
+  document.querySelector('form').reset();  // Clears the form after submission
+});
+</script>
 </body>
 </html>
