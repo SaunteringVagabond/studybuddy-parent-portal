@@ -28,11 +28,11 @@
       <h2 class="text-lg font-bold text-indigo-600">📚 Assignments & Reminders</h2>
       <form id="parentForm">
         <label>Assignments:</label>
-        <input id="assignments" placeholder="Enter assignments">
+        <input id="assignments" name="assignments" placeholder="Enter assignments">
         <label>Reminders:</label>
-        <input id="reminders" placeholder="Enter reminders">
+        <input id="reminders" name="reminders" placeholder="Enter reminders">
         <label>Messages from Parents:</label>
-        <input id="messages" placeholder="Enter messages">
+        <input id="messages" name="messages" placeholder="Enter messages">
         <button type="submit">Submit Updates</button>
       </form>
     </div>
@@ -41,17 +41,17 @@
       <div id="chatBox" class="chat-box">
         <div class="studybuddy-message message">Hello! How can I assist today?</div>
       </div>
-      <input id="chatInput" placeholder="Type your message">
+      <input id="chatInput" name="chatMessage" placeholder="Type your message">
       <button id="sendChat">Send Chat</button>
     </div>
   </div>
   <script>
     document.getElementById('parentForm').onsubmit = (e) => {
       e.preventDefault();
-      fetch('Yhttps://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type':'application/x-www-form-urlencoded' },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
           source: 'parentForm',
           assignments: document.getElementById('assignments').value,
@@ -60,23 +60,27 @@
         })
       }).then(() => alert("Updates submitted 🎉"));
     };
+
     document.getElementById('sendChat').onclick = () => {
-      fetch('https://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type':'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          source: 'parentChat',
-          chatMessage: document.getElementById('chatInput').value
-        })
-      }).then(() => {
-        let chatBox = document.getElementById('chatBox');
-        let userMsg = document.createElement('div');
-        userMsg.className = 'user-message message';
-        userMsg.textContent = document.getElementById('chatInput').value;
-        chatBox.appendChild(userMsg);
-        document.getElementById('chatInput').value = "";
-      });
+      const chatInput = document.getElementById('chatInput').value.trim();
+      if (chatInput !== "") {
+        fetch('https://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            source: 'parentChat',
+            chatMessage: chatInput
+          })
+        }).then(() => {
+          let chatBox = document.getElementById('chatBox');
+          let userMsg = document.createElement('div');
+          userMsg.className = 'user-message message';
+          userMsg.textContent = chatInput;
+          chatBox.appendChild(userMsg);
+          document.getElementById('chatInput').value = "";
+        });
+      }
     };
   </script>
 </body>
