@@ -1,58 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parent Update Portal - StudyBuddy</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 p-8 font-sans">
-  <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
-    <h1 class="text-2xl font-bold text-blue-700 mb-6">Parent Update Portal - StudyBuddy</h1>
+<form id="parentForm">
+  <input id="assignments" placeholder="Assignments">
+  <input id="reminders" placeholder="Reminders">
+  <input id="messages" placeholder="Messages from Parents">
+  <button type="submit">Submit Updates</button>
+</form>
 
-    <form id="updateForm" class="space-y-4">
-      <input type="text" id="assignments" placeholder="Assignments" class="w-full p-2 border rounded">
-      <input type="text" id="reminders" placeholder="Reminders" class="w-full p-2 border rounded">
-      <input type="text" id="messages" placeholder="Messages from Parents" class="w-full p-2 border rounded">
-      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Submit Updates</button>
-    </form>
-
-    <hr class="my-6">
-
-    <div>
-      <h2 class="text-xl font-bold text-green-600 mb-4">🌟 StudyBuddy 🌟</h2>
-      <div id="chatBox" class="bg-gray-100 rounded-lg p-4 h-48 overflow-auto"></div>
-      <div class="mt-4 flex">
-        <input type="text" id="chatInput" class="flex-grow p-2 border rounded-l" placeholder="Type message...">
-        <button id="chatSend" class="bg-green-600 text-white p-2 rounded-r hover:bg-green-700">Send</button>
-      </div>
-    </div>
-  </div>
+<input id="chatInput" placeholder="Message StudyBuddy">
+<button id="sendChat">Send Chat</button>
 
 <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbw_6hivU1qFzVrLxX1j3QzU4n1I7wLw3IgtzwtPnojL4BZy568xXKoOWDztKb_e9fiq/exec';
-
-document.getElementById('updateForm').onsubmit = e => {
+document.getElementById('parentForm').onsubmit = (e) => {
   e.preventDefault();
-  fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: new URLSearchParams({
-    assignments: assignments.value, 
-    reminders: reminders.value,
-    messages: messages.value
-  })});
-  alert('Updates submitted 🎉');
-  updateForm.reset();
+  fetch('https://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
+    method: 'POST', mode: 'no-cors',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({
+      source: 'parentForm',
+      assignments: document.getElementById('assignments').value,
+      reminders: document.getElementById('reminders').value,
+      messages: document.getElementById('messages').value
+    })
+  }).then(() => alert("Updates submitted 🎉"));
 };
 
-document.getElementById('chatSend').onclick = () => {
-  if (!chatInput.value.trim()) return;
-  fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: new URLSearchParams({
-    chatMessage: chatInput.value
-  })});
-  chatBox.innerHTML += `<div class='bg-green-100 p-2 rounded mb-2'>${chatInput.value}</div>`;
-  chatInput.value = '';
-  chatBox.scrollTop = chatBox.scrollHeight;
+document.getElementById('sendChat').onclick = () => {
+  fetch('https://script.google.com/macros/s/AKfycbyf_IDLlhxDEK9X3sm1iJMsapSw7CngesCN4lnWVLhdnFA-i876Toz3MY4KGSUx7rzY/exec', {
+    method: 'POST', mode: 'no-cors',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({
+      source: 'parentChat',
+      chatMessage: document.getElementById('chatInput').value
+    })
+  }).then(() => alert("Chat message sent! 🎉"));
 };
 </script>
-
-</body>
-</html>
