@@ -1,54 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Update Portal - StudyBuddy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8 font-sans">
+  <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <h1 class="text-2xl font-bold text-blue-700 mb-6">Parent Update Portal - StudyBuddy</h1>
+
+    <form id="updateForm" class="space-y-4">
+      <input type="text" id="assignments" placeholder="Assignments" class="w-full p-2 border rounded">
+      <input type="text" id="reminders" placeholder="Reminders" class="w-full p-2 border rounded">
+      <input type="text" id="messages" placeholder="Messages from Parents" class="w-full p-2 border rounded">
+      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Submit Updates</button>
+    </form>
+
+    <hr class="my-6">
+
+    <div>
+      <h2 class="text-xl font-bold text-green-600 mb-4">🌟 StudyBuddy 🌟</h2>
+      <div id="chatBox" class="bg-gray-100 rounded-lg p-4 h-48 overflow-auto"></div>
+      <div class="mt-4 flex">
+        <input type="text" id="chatInput" class="flex-grow p-2 border rounded-l" placeholder="Type message...">
+        <button id="chatSend" class="bg-green-600 text-white p-2 rounded-r hover:bg-green-700">Send</button>
+      </div>
+    </div>
+  </div>
+
 <script>
-document.getElementById('updateForm').addEventListener('submit', function(event) {
-  event.preventDefault();
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzCzOYGNP6AscbqlkPgu2prYtj-2N4jjLsGS5AlQKqOl4F95O23BMNBOz-ycNc5SDSM/exec';
 
-  const assignments = document.getElementById('assignments').value.trim();
-  const reminders = document.getElementById('reminders').value.trim();
-  const messages = document.getElementById('messages').value.trim();
+document.getElementById('updateForm').onsubmit = e => {
+  e.preventDefault();
+  fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: new URLSearchParams({
+    assignments: assignments.value, 
+    reminders: reminders.value,
+    messages: messages.value
+  })});
+  alert('Updates submitted 🎉');
+  updateForm.reset();
+};
 
-  const data = new URLSearchParams({
-    assignments: assignments,
-    reminders: reminders,
-    messages: messages
-  });
-
-  fetch('https://script.google.com/macros/s/AKfycbwj1ykwhKo094pKKpgHjHvyfCQLcCTg6znj-BD6nbjvW6Pe5zf0MVHvDcGi2AuYpFDb/exec', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: data
-  });
-
-  alert("Your updates have been successfully submitted! 🎉");
-  document.getElementById('updateForm').reset();
-});
-
-document.getElementById('chatSend').addEventListener('click', function() {
-  const message = document.getElementById('chatInput').value.trim();
-
-  if (message !== "") {
-    const chatBox = document.getElementById('chatBox');
-    const userMsgDiv = document.createElement('div');
-    userMsgDiv.className = 'bg-green-100 rounded p-2 text-sm mb-2';
-    userMsgDiv.textContent = message;
-
-    chatBox.appendChild(userMsgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    const chatData = new URLSearchParams({ chatMessage: message });
-
-    fetch('https://script.google.com/macros/s/AKfycbwLhBxC4zciNjaVMIDOkZsl3BeVuY2ajX9ghIbU0mFVdxowtf4fLjDiFBg4tKzHEKGc/exec', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: chatData
-    });
-
-    document.getElementById('chatInput').value = "";
-  }
-});
+document.getElementById('chatSend').onclick = () => {
+  if (!chatInput.value.trim()) return;
+  fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: new URLSearchParams({
+    chatMessage: chatInput.value
+  })});
+  chatBox.innerHTML += `<div class='bg-green-100 p-2 rounded mb-2'>${chatInput.value}</div>`;
+  chatInput.value = '';
+  chatBox.scrollTop = chatBox.scrollHeight;
+};
 </script>
+
+</body>
+</html>
