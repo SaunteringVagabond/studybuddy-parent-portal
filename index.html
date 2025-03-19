@@ -1,68 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parent Update Portal - StudyBuddy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Update Portal - StudyBuddy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 p-8 font-sans">
+  <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <h1 class="text-2xl font-bold text-blue-700 mb-6">Parent Update Portal - StudyBuddy</h1>
 
-    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <form id="updateForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold">Assignments:</label>
+        <input type="text" id="assignments" class="w-full p-2 border rounded" placeholder="Enter assignments for Evalyn...">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold">Reminders:</label>
+        <input type="text" id="reminders" class="w-full p-2 border rounded" placeholder="Enter reminders for Evalyn...">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold">Messages from Parents:</label>
+        <input type="text" id="messages" class="w-full p-2 border rounded" placeholder="Enter motivational or supportive messages...">
+      </div>
+      <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+        Submit Updates
+      </button>
+    </form>
 
-        <h1 class="text-2xl font-bold text-blue-700 mb-6">Parent Update Portal - StudyBuddy</h1>
+    <hr class="my-6">
 
-        <form id="updateForm">
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold">Assignments:</label>
-                    <input type="text" class="w-full p-2 border rounded" placeholder="Enter assignments for Evalyn...">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold">Reminders:</label>
-                    <input type="text" class="w-full p-2 border rounded" placeholder="Enter reminders for Evalyn...">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold">Messages from Parents:</label>
-                    <input type="text" class="w-full p-2 border rounded" placeholder="Enter motivational or supportive messages...">
-                </div>
-
-                <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Submit Updates</button>
-            </div>
-        </form>
-
-        <hr class="my-6">
-
-        <div>
-            <h2 class="text-xl font-bold text-green-600 mb-4">🌟 StudyBuddy 🌟</h2>
-            <div class="bg-gray-100 rounded-lg p-4 h-48 overflow-auto">
-                <div class="mb-2">
-                    <div class="text-sm font-medium text-gray-800">StudyBuddy:</div>
-                    <div class="bg-blue-100 rounded p-2 text-sm">Evalyn had a productive day! Finished math early, a bit tired after practice, but feeling positive overall.</div>
-                </div>
-                <div class="mb-2">
-                    <div class="text-sm font-medium text-gray-800">Margot:</div>
-                    <div class="bg-green-100 rounded p-2 text-sm">Thanks! Any subjects she mentioned struggling with today?</div>
-                </div>
-            </div>
-
-            <div class="mt-4 flex">
-                <input type="text" class="flex-grow p-2 border rounded-l" placeholder="Type your message...">
-                <button class="bg-green-600 text-white p-2 rounded-r hover:bg-green-700">Send</button>
-            </div>
+    <div>
+      <h2 class="text-xl font-bold text-green-600 mb-4">🌟 StudyBuddy 🌟</h2>
+      <div id="chatBox" class="bg-gray-100 rounded-lg p-4 h-48 overflow-auto">
+        <div class="mb-2">
+          <div class="text-sm font-medium text-gray-800">StudyBuddy:</div>
+          <div class="bg-blue-100 rounded p-2 text-sm">Evalyn had a productive day! Finished math early, a bit tired after practice, but feeling positive overall.</div>
         </div>
+      </div>
 
+      <div class="mt-4 flex">
+        <input type="text" id="chatInput" class="flex-grow p-2 border rounded-l" placeholder="Type your message...">
+        <button id="chatSend" class="bg-green-600 text-white p-2 rounded-r hover:bg-green-700">Send</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        document.getElementById('updateForm').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevents page reload
-            alert("Your updates have been successfully submitted! 🎉");  // Confirmation message
-            document.getElementById('updateForm').reset();  // Clears the form after submission
-        });
-    </script>
+  <script>
+    document.getElementById('updateForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      alert("Your updates have been successfully submitted! 🎉");
+      document.getElementById('updateForm').reset();
+    });
 
+    document.getElementById('chatSend').addEventListener('click', function() {
+      const chatInput = document.getElementById('chatInput');
+      const chatBox = document.getElementById('chatBox');
+      
+      if (chatInput.value.trim() !== '') {
+        const parentMessage = document.createElement('div');
+        parentMessage.innerHTML = `
+          <div class="text-sm font-medium text-gray-800">Margot:</div>
+          <div class="bg-green-100 rounded p-2 text-sm">${chatInput.value}</div>`;
+        
+        chatBox.appendChild(parentMessage);
+        chatInput.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    });
+  </script>
 </body>
 </html>
