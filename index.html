@@ -53,23 +53,28 @@
       document.getElementById('updateForm').reset();
     });
 
-    <script>
-document.querySelector('button').addEventListener('click', function(event) {
-    event.preventDefault();
+// JavaScript: Send chat message to Google Sheets and update UI
+const sendButton = document.getElementById('sendButton');  // ID of your send button
+sendButton.addEventListener('click', () => {
+  const message = document.getElementById('chatInput').value.trim();
+  if (message !== "") {
+    // 1. Append the new message to the chat UI for immediate feedback
+    const chatBox = document.getElementById('chatBox');
+    const userMsgDiv = document.createElement('div');
+    userMsgDiv.className = 'message user-message';   // CSS class for user messages
+    userMsgDiv.textContent = message;
+    chatBox.appendChild(userMsgDiv);
 
-    const assignments = document.querySelector('input[placeholder="Enter assignments for Evalyn..."]').value;
-    const reminders = document.querySelector('input[placeholder="Enter reminders for Evalyn..."]').value;
-    const messages = document.querySelector('input[placeholder="Enter motivational or supportive messages..."]').value;
+    // 2. Send the message to Google Sheets via Apps Script
+    // Assumes an Apps Script function `storeMessage` that takes the message and appends it to a Sheet
+    google.script.run.withSuccessHandler(function() {
+      console.log('Message stored in Google Sheets');
+    }).storeMessage(message);
 
-    fetch('YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ assignments, reminders, messages, source: 'parent' }),
-    });
-
+    // 3. Clear the input field for the next message
+    document.getElementById('chatInput').value = "";
+  }
+});
     alert("Your updates have been successfully submitted! 🎉");
     document.querySelectorAll('input').forEach(input => input.value = '');
 });
