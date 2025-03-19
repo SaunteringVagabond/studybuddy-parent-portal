@@ -47,36 +47,38 @@
   </div>
 
   <script>
-    document.getElementById('updateForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      alert("Your updates have been successfully submitted! 🎉");
-      document.getElementById('updateForm').reset();
-    });
+  document.getElementById('updateForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    alert("Your updates have been successfully submitted! 🎉");
+    document.getElementById('updateForm').reset();
+  });
 
-    // JavaScript: Send chat message to Google Sheets and update UI
-    const sendButton = document.getElementById('chatSend');  // Corrected Button ID
-    sendButton.addEventListener('click', () => {
-      const message = document.getElementById('chatInput').value.trim();
-      if (message !== "") {
-        // Append the new message to the chat UI immediately
-        const chatBox = document.getElementById('chatBox');
+  const sendButton = document.getElementById('chatSend');
+  sendButton.addEventListener('click', () => {
+    const message = document.getElementById('chatInput').value.trim();
+    if (message !== "") {
+      const chatBox = document.getElementById('chatBox');
 
-        const userMsgDiv = document.createElement('div');
-        userMsgDiv.className = 'bg-green-100 rounded p-2 text-sm mb-2';
-        userMsgDiv.textContent = message;
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'bg-green-100 rounded p-2 text-sm mb-2';
+      userMsgDiv.textContent = message;
 
-        chatBox.appendChild(userMsgDiv);
-        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to newest message
+      chatBox.appendChild(userMsgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
 
-        // Send the message to Google Sheets via Apps Script
-        google.script.run.withSuccessHandler(function() {
-          console.log('Message stored in Google Sheets');
-        }).storeMessage(message);
+      // Updated AJAX call to Google Apps Script Web App
+      fetch('https://script.google.com/macros/s/AKfycbzer_1pRv0b9C-Vzb7w0quiFeZb8RnCi4ROUquG2yjCLmj3eySLRM52KJRtzBzABybl/exec', {  // 
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'message=' + encodeURIComponent(message),
+      });
 
-        // Clear the input field after sending the message
-        document.getElementById('chatInput').value = "";
-      }
-    });
-  </script>
+      document.getElementById('chatInput').value = "";
+    }
+  });
+</script>
 </body>
 </html>
