@@ -1,93 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parent Update Portal - StudyBuddy</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { background-color: #eef2ff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; }
-    .container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    h1 { color: #4a90e2; text-align: center; font-size: 26px; font-weight: bold; }
-    label { font-weight: bold; color: #4a4a4a; display: block; margin-top: 10px; }
-    input, button { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
-    button { background: #4a90e2; color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
-    button:hover { background: #357ABD; }
-    .dashboard-section { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-    .chat-container { background: #e3f2fd; padding: 12px; border-radius: 10px; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .chat-box { background: #f8f9fa; padding: 10px; border-radius: 10px; max-height: 200px; overflow-y: auto; }
-    .message { padding: 8px; border-radius: 5px; margin-bottom: 5px; }
-    .user-message { background: #d1e8ff; text-align: right; }
-    .studybuddy-message { background: #bbdefb; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Parent Update Portal - StudyBuddy</h1>
-    <div class="dashboard-section">
-      <h2 class="text-lg font-bold text-indigo-600">📚 Assignments & Reminders</h2>
-      <form id="parentForm">
-        <label>Assignments:</label>
-        <input id="assignments" name="assignments" placeholder="Enter assignments">
-        <label>Reminders:</label>
-        <input id="reminders" name="reminders" placeholder="Enter reminders">
-        <label>Messages from Parents:</label>
-        <input id="messages" name="messages" placeholder="Enter messages">
-        <button type="submit">Submit Updates</button>
-      </form>
-    </div>
-    <div class="chat-container">
-      <h2 class="text-lg font-bold text-blue-700">💬 Chat with StudyBuddy</h2>
-      <div id="chatBox" class="chat-box">
-        <div class="studybuddy-message message">Hello! How can I assist today?</div>
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { GoogleSpreadsheet } from 'google-spreadsheet';
+
+const SHEET_ID = "your_google_sheet_id_here";
+
+const WebPortal = () => {
+  const [tasks, setTasks] = useState([]);
+  const [reminders, setReminders] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [messages] = useState([
+    "You're doing amazing!",
+    "Keep shining bright, Evalyn!",
+    "Why was the math book sad? Because it had too many problems!",
+    "What did the Irish dancer say when she lost her shoe? 'Heel come back!'"
+  ]);
+
+  const fetchSheetData = async () => {
+    const doc = new GoogleSpreadsheet(SHEET_ID);
+    await doc.useApiKey('your_api_key_here');
+    await doc.loadInfo();
+
+    const tasksSheet = doc.sheetsByTitle['Tasks'];
+    const remindersSheet = doc.sheetsByTitle['Reminders'];
+    const eventsSheet = doc.sheetsByTitle['Events'];
+
+    const tasksRows = await tasksSheet.getRows();
+    const remindersRows = await remindersSheet.getRows();
+    const eventsRows = await eventsSheet.getRows();
+
+    setTasks(tasksRows);
+    setReminders(remindersRows);
+    setEvents(eventsRows);
+  };
+
+  useEffect(() => {
+    fetchSheetData();
+  }, []);
+
+  const removeTask = (index) => {
+    setTasks(prevTasks => prevTasks.filter((_, i) => i !== index));
+  };
+
+  const showEasterEgg = () => {
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    alert(randomMessage);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6 font-sans">
+      <h1 className="text-3xl font-bold mb-4 text-center">Evalyn's Portal</h1>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="bg-white shadow-lg rounded-2xl p-4">
+          <h2 className="text-xl font-semibold mb-2">Tasks</h2>
+          <AnimatePresence>
+            {tasks.map((task, index) => (
+              <motion.div
+                key={index}
+                className="flex justify-between items-center p-2 border-b"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0, x: 50 }}
+              >
+                <span>{task.title}</span>
+                <input type="checkbox" onClick={() => removeTask(index)} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        <div className="bg-white shadow-lg rounded-2xl p-4">
+          <h2 className="text-xl font-semibold mb-2">Reminders</h2>
+          {reminders.map((reminder, index) => (
+            <div key={index} className="p-2 border-b">
+              <span>{reminder.note}</span>
+            </div>
+          ))}
+        </div>
       </div>
-      <input id="chatInput" name="chatMessage" placeholder="Type your message">
-      <button id="sendChat">Send Chat</button>
+
+      <div className="mt-4 bg-white shadow-lg rounded-2xl p-4">
+        <h2 className="text-xl font-semibold mb-2">Upcoming Events</h2>
+        <div className="flex overflow-x-scroll gap-4">
+          {events.map((event, index) => (
+            <div key={index} className="min-w-[200px] bg-green-100 rounded-lg p-3">
+              <h3 className="font-semibold">{event.name}</h3>
+              <p className="text-sm">{event.date}</p>
+              <ul className="mt-2">
+                {event.items?.split(',').map((item, i) => (
+                  <li key={i}>[] {item.trim()}</li>
+                ))}
+              </ul>
+            </div>
+          <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Europe%2FBerlin&showPrint=0&showTz=0&src=cXVlZW5vZnBhbmRhczgxQGdtYWlsLmNvbQ&src=ZW4udXNhI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039BE5&color=%230B8043" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no">
+            
+          </iframe>
+          ))}
+        </div>
+      </div>
+
+      <div
+        className="fixed bottom-4 right-4 cursor-pointer opacity-30 hover:opacity-100 transition-opacity"
+        onClick={showEasterEgg}
+      >
+        ☘️
+      </div>
     </div>
-  </div>
+  );
+};
 
-  <script>
-    // ✅ Clear form fields after successful submission
-    document.getElementById('parentForm').onsubmit = (e) => {
-      e.preventDefault();
-      fetch('https://script.google.com/macros/s/AKfycbwomXgliV6zBp57yB3V2DRrjH_bHr28Ve5C8wSQFzOOI1B340GGeFm26uKvPhlO0HaJ/exec', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          source: 'parentForm',
-          assignments: document.getElementById('assignments').value,
-          reminders: document.getElementById('reminders').value,
-          messages: document.getElementById('messages').value
-        })
-      }).then(() => {
-        alert("Updates submitted 🎉");
-        document.getElementById('parentForm').reset(); // ✅ Clears the form
-      });
-    };
-
-    // ✅ Ensure chat button correctly sends messages
-    document.getElementById('sendChat').onclick = () => {
-      const chatInput = document.getElementById('chatInput').value.trim();
-      if (chatInput !== "") {
-        fetch('https://script.google.com/macros/s/AKfycbwomXgliV6zBp57yB3V2DRrjH_bHr28Ve5C8wSQFzOOI1B340GGeFm26uKvPhlO0HaJ/exec', {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            source: 'parentChat',
-            chatMessage: chatInput
-          })
-        }).then(() => {
-          let chatBox = document.getElementById('chatBox');
-          let userMsg = document.createElement('div');
-          userMsg.className = 'user-message message';
-          userMsg.textContent = chatInput;
-          chatBox.appendChild(userMsg);
-          document.getElementById('chatInput').value = ""; // ✅ Clears chat input field
-        });
-      }
-    };
-  </script>
-</body>
-</html>
+export default WebPortal;
